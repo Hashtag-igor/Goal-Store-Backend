@@ -5,12 +5,15 @@ import { getProducts, createProduct, deleteProduct, searchProducts } from "./con
 
 const routes = Router();
 
+//Primeiro acesse a rota padrão ("/"), para depois poder acessar as rotas "/products" ou "/users" lá em baixo.
+//Eu coloquei return e resposta para que a gente possa saber se entrou na rota padrão.
 routes.get("/", (req, res) => {
   return res.json({
     sucess: true,
     message: "Sucesso!",
   });
 });
+
 
 // Rotas de Usuários
 routes.get("/users", getUsers);

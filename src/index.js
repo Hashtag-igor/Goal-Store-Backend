@@ -4,7 +4,7 @@ import cors from "cors";
 import ConnectDatabase from "./database/db.js";
 import routes from "./routes.js";
 
-const port = process.env.Port || 3001;
+const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(cors());

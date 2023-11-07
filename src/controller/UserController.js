@@ -1,12 +1,9 @@
 import User from "../models/User.js"
+import jwt from "jsonwebtoken";
 
 async function getUsers(req, res){
-    //Espera a resposta e procura dentro dos JSONs criados com padrão pré definido do tipo "USER" do arquivo "User.js", 
-    //..e os que forem encontrados serão salvos dentro da variavel "users", para serem mostrados;
-    const users = await User.find()
-        
-    //Vai mostrar os JSONs que foram criados na variavel;
-    return res.json(users)
+  const users = await User.find({}, '_id name'); // Retorna apenas os IDs e nomes dos usuários
+  return res.json(users);
 }
 
 async function createUser(req, res){
@@ -30,6 +27,23 @@ async function deleteUser(req, res){
     return res.status(200).json({res: "User was deleted"})
 }
 
+async function loginToken(req, res) {
+  const { email, password } = req.body;
+
+  // Verifique as credenciais do usuário no banco de dados
+  const user = await User.findOne({ email, password });
+
+  if (!user) {
+    return res.status(401).json({ message: "Credenciais inválidas" });
+  }
+
+  // Gere um token de autenticação
+  const token = jwt.sign({ user: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h", // Tempo de expiração do token
+  });
+
+  res.json({ token });
+}
 
 //para exportar mais de um
-export {createUser, getUsers, deleteUser}
+export {createUser, getUsers, deleteUser, loginToken}
